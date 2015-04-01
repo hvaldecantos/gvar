@@ -1,6 +1,7 @@
 .bundle/
 Gemfile.lock
 pkg/
+coverage/
 *.bundle
 *.so
 *.o
