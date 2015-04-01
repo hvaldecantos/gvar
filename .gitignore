@@ -1,0 +1,10 @@
+.bundle/
+Gemfile.lock
+pkg/
+*.bundle
+*.so
+*.o
+*.a
+*.swp
+mkmf.log
+*~
