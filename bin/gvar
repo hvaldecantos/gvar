@@ -1,3 +1,9 @@
 #!/usr/bin/ruby
+require 'g_var_cli'
 
-puts "gvar ran with #{ARGV}"
+begin
+  puts GVarCLI.run ARGV
+rescue  => error
+  puts error
+  exit 1
+end
