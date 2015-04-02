@@ -1,9 +1,10 @@
-class ListShaCmd
+require 'cmd'
+
+class ListShaCmd < Cmd
   COMMAND = "git rev-list %s"
   def initialize cmd_runner
-    @cmd_runner = cmd_runner
+    super
     @shas = []
-    @cmd = ""
   end
 
   def shas tag_range = nil
@@ -13,12 +14,6 @@ class ListShaCmd
   end
 
   private
-    def analyze_result
-      @cmd_runner.run(@cmd).each_line do |line|
-        analize(line.strip)
-      end
-    end
-
     def analize line
       @shas << line
     end

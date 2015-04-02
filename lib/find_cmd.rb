@@ -1,9 +1,10 @@
-class FindCmd
+require 'cmd'
+
+class FindCmd < Cmd
   COMMAND = "find %s -name *.c -or -name *.h"
   def initialize cmd_runner
-    @cmd_runner = cmd_runner
+    super
     @dirs = {}
-    @cmd = ""
   end
 
   def dirs
@@ -13,14 +14,7 @@ class FindCmd
   end
 
   private
-    def analyze_result
-      @cmd_runner.run(@cmd).each_line do |line|
-        analize(line.strip)
-      end
-    end
-
     def analize line
       @dirs[File.dirname(line)] = (@dirs[File.dirname(line)] || 0) + 1
     end
-
 end
