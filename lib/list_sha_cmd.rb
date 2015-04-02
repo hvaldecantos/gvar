@@ -3,17 +3,18 @@ class ListShaCmd
   def initialize cmd_runner
     @cmd_runner = cmd_runner
     @shas = []
+    @cmd = ""
   end
 
   def shas tag_range = nil
-    analyze_result (tag_range || "HEAD")
+    @cmd = COMMAND % (tag_range || "HEAD")
+    analyze_result
     @shas
   end
 
   private
-    def analyze_result tag_range = nil
-      cmd = COMMAND % (tag_range || "HEAD")
-      @cmd_runner.run(cmd).each_line do |line|
+    def analyze_result
+      @cmd_runner.run(@cmd).each_line do |line|
         analize(line.strip)
       end
     end
