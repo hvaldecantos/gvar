@@ -7,8 +7,8 @@ class ListShaCmd < Cmd
     @shas = []
   end
 
-  def shas tag_range = nil
-    @cmd = COMMAND % (tag_range || "HEAD")
+  def run opts = {}
+    @cmd = COMMAND % (opts[:rev_range] || "HEAD")
     analyze_result
     @shas
   end
