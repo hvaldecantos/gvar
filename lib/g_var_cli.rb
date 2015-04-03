@@ -2,6 +2,7 @@ require 'optparse'
 require 'cmd_runner'
 require 'find_cmd'
 require 'list_sha_cmd'
+require 'checkout_cmd'
 
 class GVarCLI
   
@@ -21,6 +22,8 @@ class GVarCLI
       FindCmd.new(cr)
     elsif gvar_opts.include? LIST_SHAS
       ListShaCmd.new(cr)
+    elsif gvar_opts.include? '--checkout'
+      CheckoutCmd.new(cr)
     end
   end
 
@@ -32,6 +35,10 @@ class GVarCLI
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
+
+      opts.on('--checkout', 'Checkout')  { gvar_opts << '--checkout' }
+      opts.on('--sha shaID', 'dhar id of the revision')  { |o| cmd_opts[:sha] = o }
+
       opts.on('--list-shas', 'Return an array of SHA-1 commit identifier')  { gvar_opts << '--list-shas' }
       opts.on('--rev-range tag1..tag2', 'Set the range of sha to take into consideration')  { |o| cmd_opts[:rev_range] = o }
     end.parse!(argv)
