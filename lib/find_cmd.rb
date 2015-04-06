@@ -7,7 +7,7 @@ class FindCmd < Cmd
     @dirs = {}
   end
 
-  def dirs
+  def run opts = {}
     @cmd = COMMAND % @cmd_runner.wd
     analyze_result
     @dirs

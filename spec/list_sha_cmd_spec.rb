@@ -5,6 +5,6 @@ describe "ListShaCmd class" do
     cr = double(CmdRunner)
     list_sha = ListShaCmd.new(cr)
     expect(list_sha).to receive(:analyze_result).once
-    list_sha.shas
+    list_sha.run
   end
 end

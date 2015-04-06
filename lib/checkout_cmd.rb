@@ -1,20 +1,17 @@
 require 'cmd'
 
-class ListShaCmd < Cmd
-  COMMAND = "git rev-list %s"
+class CheckoutCmd < Cmd
+  COMMAND = "git checkout %s"
   def initialize cmd_runner
     super
-    @shas = []
   end
 
   def run opts = {}
-    @cmd = COMMAND % (opts[:rev_range] || "HEAD")
+    @cmd = COMMAND % (opts[:sha] || "HEAD")
     analyze_result
-    @shas
   end
 
   private
     def analize line
-      @shas << line
     end
 end

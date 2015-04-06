@@ -6,6 +6,6 @@ describe "FindCmd class" do
     finder = FindCmd.new(cr)
     allow(cr).to receive(:wd)
     expect(finder).to receive(:analyze_result).once
-    finder.dirs
+    finder.run
   end
 end
