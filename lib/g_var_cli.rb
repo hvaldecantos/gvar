@@ -4,6 +4,7 @@ require 'find_cmd'
 require 'list_sha_cmd'
 require 'checkout_cmd'
 require 'find_gv_cmd'
+require 'g_var/version'
 
 class GVarCLI
   
