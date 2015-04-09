@@ -1,4 +1,5 @@
 require 'cmd'
+require 'checkout_cmd'
 
 class FindGVCmd < Cmd
   COMMAND = "ctags -x --c-kinds=v --file-scope=no %s/*.c %s/*.h"
@@ -9,6 +10,10 @@ class FindGVCmd < Cmd
 
   def run opts = {}
     opts = default(opts)
+
+    co = CheckoutCmd.new(@cmd_runner)
+    co.run(opts)
+
     opts[:dirs].each do |dir|
       @cmd = COMMAND % [ dir, dir]
       analyze_result
@@ -18,15 +23,15 @@ class FindGVCmd < Cmd
 
   def default opts = {}
     opts[:dirs] ||= [@cmd_runner.wd]
+    opts[:sha] ||= "HEAD"
     opts
   end
 
   private
     def analize line
-      # line.start_with "error:" raise StandardError.new("")
-      # @dirs[File.dirname(line)] = (@dirs[File.dirname(line)] || 0) + 1
       line_match = line.match(/^(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)$/)
-      name, var, line_num, code = line_match.captures unless line_match.nil?
-      @gvars << "#{line_num} - #{name} - #{code} "
+      name, var, line_num, line_code = line_match.captures unless line_match.nil?
+      h = {name: name, line_num: line_num, line_code: line_code, bug: 0}
+      @gvars << h
     end
 end
