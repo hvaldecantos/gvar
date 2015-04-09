@@ -38,7 +38,7 @@ class GVarCLI
       opts.banner = "\ngvar [\t--find-src-dirs |\n" +
                           "\t--list-shas <--rev-range=tag1..tag2> |\n"+
                           "\t--checkout <--sha=6419aee248d76> |\n" +
-                          "\t--find-gv --dirs=\"['src','liv']\" --sha=6419aee248d76 ]\n\n"
+                          "\t--find-gv --dirs=\"['src','liv']\" <--sha=6419aee248d76> ]\n\n"
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
