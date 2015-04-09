@@ -5,6 +5,7 @@ require 'list_sha_cmd'
 require 'checkout_cmd'
 require 'find_gv_cmd'
 require 'g_var/version'
+require 'gv_storer'
 
 class GVarCLI
   
@@ -28,6 +29,8 @@ class GVarCLI
       CheckoutCmd.new(cr)
     elsif gvar_opts.include? '--find-gv'
       FindGVCmd.new(cr)
+    elsif gvar_opts.include? '--test'
+      GVStorer.new
     end
   end
 
@@ -51,6 +54,8 @@ class GVarCLI
       opts.separator("")
       opts.on('--find-gv', 'Find global vars')  { gvar_opts << '--find-gv' }
       opts.on('--dirs array_dirnames', 'array directory to analyse and find gvs') { |o| cmd_opts[:dirs] = eval(o) }
+      opts.separator("")
+      opts.on('--test', 'Test something new')  { gvar_opts << '--test' }
     end.parse!(argv)
     if (gvar_opts & GVAR_OPTS).size > 1
       raise OptionParser::ParseError.new("#{gvar_opts.join(', ')} are mutually exclusive options")
