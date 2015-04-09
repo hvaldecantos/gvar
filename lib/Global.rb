@@ -1,20 +1,7 @@
-gem 'mongo', '~> 1.8'
-
 require 'rubygems'
 require 'mongo'
 require 'mongo_mapper'
 
-#README
-#This class requires mongo version 1.8, mongo_mapper, bson and bson_exit using:
-#gem install mongo -v 1.8
-#gem install mongo_mapper
-#gem install bson -v 1.8
-#gem install bson_ext -v 1.8
-
-MongoMapper.database="gvar"
-
-#The global class
-###################
 class Global
   include MongoMapper::Document
 
@@ -28,7 +15,3 @@ class Global
     @first_commit = first_commit
   end    
 end
-
-#Query example
-g = Global.where(:first_commit => 111).first
-puts g[:first_commit]
