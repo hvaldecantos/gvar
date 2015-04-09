@@ -1,6 +1,6 @@
 require 'cmd'
 require 'find_gv_cmd'
-require 'Global'
+require 'global'
 
 class GVStorer
   MongoMapper.database="gvar01"
