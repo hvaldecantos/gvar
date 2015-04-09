@@ -4,6 +4,6 @@ require 'g_var_cli'
 begin
   puts GVarCLI.run ARGV
 rescue  => error
-  puts error.stack
+  puts error.backtrace
   exit 1
 end
