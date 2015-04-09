@@ -7,11 +7,16 @@ class CheckoutCmd < Cmd
   end
 
   def run opts = {}
-    @cmd = COMMAND % (opts[:sha] || "HEAD")
+    default opts
+    @cmd = COMMAND % opts[:sha]
     analyze_result
   end
 
   private
     def analize line
+    end
+    def default opts = {}
+      opts[:sha] ||= "HEAD"
+      opts
     end
 end

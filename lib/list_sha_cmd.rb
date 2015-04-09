@@ -8,7 +8,8 @@ class ListShaCmd < Cmd
   end
 
   def run opts = {}
-    @cmd = COMMAND % (opts[:rev_range] || "HEAD")
+    default opts
+    @cmd = COMMAND % opts[:rev_range]
     analyze_result
     @shas
   end
@@ -16,5 +17,9 @@ class ListShaCmd < Cmd
   private
     def analize line
       @shas << line
+    end
+    def default opts = {}
+      opts[:rev_range] ||= "HEAD"
+      opts
     end
 end

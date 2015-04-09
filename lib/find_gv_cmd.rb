@@ -21,17 +21,17 @@ class FindGVCmd < Cmd
     @gvars
   end
 
-  def default opts = {}
-    opts[:dirs] ||= [@cmd_runner.wd]
-    opts[:sha] ||= "HEAD"
-    opts
-  end
-
   private
     def analize line
       line_match = line.match(/^(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)$/)
       name, var, line_num, line_code = line_match.captures unless line_match.nil?
       h = {name: name, line_num: line_num, line_code: line_code, bug: 0}
       @gvars << h
+    end
+
+    def default opts = {}
+      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:sha] ||= "HEAD"
+      opts
     end
 end
