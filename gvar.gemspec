@@ -21,8 +21,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency 'rspec', '~> 3.2'
   spec.add_development_dependency 'simplecov'
-  spec.add_development_dependency 'mongo', '~> 1.8'
-  spec.add_development_dependency 'bson', '~>1.8'
-  spec.add_development_dependency 'bson_ext', '~>1.8'
-  spec.add_development_dependency 'mongo_mapper'
+  spec.add_development_dependency 'mongo', '~> 2.0'
 end

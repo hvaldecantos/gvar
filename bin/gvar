@@ -1,9 +1,9 @@
 #!/usr/bin/ruby
 require 'g_var_cli'
 
-begin
+#begin
   puts GVarCLI.run ARGV
-rescue  => error
-  puts error.backtrace
-  exit 1
-end
+#rescue  => error
+#  puts error.backtrace
+#  exit 1
+#end
