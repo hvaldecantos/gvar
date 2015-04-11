@@ -16,6 +16,7 @@ class StoreCommitsCmd < Cmd
     find_gv_cmd = FindGVCmd.new(@cmd_runner)
     checkout_cmd = CheckoutCmd.new(@cmd_runner)
 
+    Mongo::Logger.logger.level = Logger::INFO
     client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
     shas = list_sha_cmd.run(opts)
