@@ -10,6 +10,7 @@ class FindGVCmd < Cmd
 
   def run opts = {}
     opts = default(opts)
+    @gvars = []
 
     co = CheckoutCmd.new(@cmd_runner)
     co.run(opts)
