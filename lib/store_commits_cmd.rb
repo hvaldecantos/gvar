@@ -24,7 +24,7 @@ class StoreCommitsCmd < Cmd
     shas.each do |sha|
       checkout_cmd.run(:sha=>sha)
 
-      globals = find_gv_cmd.run(:dirs=>['src','lib'])
+      globals = find_gv_cmd.run(opts)
 
       commit = {}
       commit[:sha] = sha
