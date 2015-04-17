@@ -4,7 +4,9 @@ require 'find_cmd'
 require 'list_sha_cmd'
 require 'checkout_cmd'
 require 'find_gv_cmd'
+require 'find_bugs_cmd'
 require 'store_commits_cmd'
+
 require 'g_var/version'
 
 class GVarCLI
@@ -31,6 +33,8 @@ class GVarCLI
       FindGVCmd.new(cr)
     elsif gvar_opts.include? '--store-commits'
       StoreCommitsCmd.new(cr)
+    elsif gvar_opts.include? '--find-bugs'
+      FindBugsCmd.new(cr)
     end
   end
 
@@ -41,8 +45,9 @@ class GVarCLI
       opts.banner = "\ngvar [\t--find-src-dirs |\n" +
                           "\t--list-shas <--rev-range=tag1..tag2> |\n"+
                           "\t--checkout <--sha=6419aee248d76> |\n" +
-                          "\t--find-gv --dirs=\"['src','liv']\" <--sha=6419aee248d76> ]\n" +
-                          "\t--store-commits --db=dbname  ]\n\n"
+                          "\t--find-gv --dirs=\"['src','lib']\" <--sha=6419aee248d76> \n" +
+                          "\t--store-commits --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
+                          "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 ]\n\n"
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
@@ -58,6 +63,7 @@ class GVarCLI
       opts.separator("")
       opts.on('--store-commits', 'Store commits to DB')  { gvar_opts << '--store-commits' }
       opts.on('--db ', 'Database to store commits')  { |o| cmd_opts[:db] = o }
+      opts.on('--find-bugs', 'Find bugs related to stored global variables')  { gvar_opts << '--find-bugs' }
     end.parse!(argv)
     if (gvar_opts & GVAR_OPTS).size > 1
       raise OptionParser::ParseError.new("#{gvar_opts.join(', ')} are mutually exclusive options")
