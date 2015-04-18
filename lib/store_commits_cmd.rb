@@ -4,6 +4,8 @@ require 'list_sha_cmd'
 require 'checkout_cmd'
 require 'find_gv_cmd'
 require 'globals_info'
+require 'mongo'
+require 'commit_info_cmd'
 
 class StoreCommitsCmd < Cmd
   def initialize cmd_runner
@@ -19,7 +21,7 @@ class StoreCommitsCmd < Cmd
     globals_info = GlobalsInfo.new
 
     Mongo::Logger.logger.level = Logger::INFO
-    client = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
+    mongo = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
     shas = list_sha_cmd.run(opts)
     
@@ -29,20 +31,33 @@ class StoreCommitsCmd < Cmd
       globals = find_gv_cmd.run(opts)
       commit = {}
       commit[:sha] = sha
-      commit[:globals] = find_bugs(globals, prior_globals)
-      client[:commits].insert_one(commit)
+      commit[:globals] = find_bugs(sha, globals, prior_globals, opts)
+      mongo[:commits].insert_one(commit)
       prior_globals = globals
       globals_info.process_commit(commit)
     end
 
     # add globals info
-    client[:globals].insert_many(globals_info.info.values)
+    mongo[:globals].insert_many(globals_info.info.values)
 
     "Commits stored."
   end
 
   private
-    def find_bugs globals, prior_globals
+    def find_bugs sha, globals, prior_globals, opts
+
+      commit_info_cmd = CommitInfoCmd.new(@cmd_runner)
+      info = commit_info_cmd.run(opts.merge({sha: sha}))
+
+      if info[:bug_fix]
+        prior_globals.each do |var_name, v|
+          if info[:deletions].match /#{var_name}/ 
+            puts "Bug found in #{sha}"
+            globals[var_name][:bug] = 1
+            puts "Bug found in #{sha}"
+          end
+        end
+      end
       globals
     end
 
