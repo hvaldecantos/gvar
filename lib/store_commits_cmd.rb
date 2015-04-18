@@ -52,9 +52,8 @@ class StoreCommitsCmd < Cmd
       if info[:bug_fix]
         prior_globals.each do |var_name, v|
           if info[:deletions].match /#{var_name}/ 
-            puts "Bug found in #{sha}"
             globals[var_name][:bug] = 1
-            puts "Bug found in #{sha}"
+            puts "Bug found related to #{var_name} in #{sha}"
           end
         end
       end
