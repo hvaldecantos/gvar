@@ -21,22 +21,25 @@ class StoreCommitsCmd < Cmd
 
     shas = list_sha_cmd.run(opts)
     
+    prior_globals = {}
     shas.each do |sha|
       checkout_cmd.run(:sha=>sha)
-
       globals = find_gv_cmd.run(opts)
-
       commit = {}
       commit[:sha] = sha
-      commit[:globals] = globals
-      
+      commit[:globals] = find_bugs(globals, prior_globals)
       client[:commits].insert_one(commit)
+      prior_globals = globals
     end
 
     "Commits stored."
   end
 
   private
+    def find_bugs globals, prior_globals
+      globals
+    end
+
     def analize line
       
     end
