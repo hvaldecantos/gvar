@@ -13,7 +13,6 @@ class CommitInfoCmd < Cmd
     default opts
     opts[:dirs].each do |dir|
       @cmd = COMMAND % [opts[:sha], opts[:sha], dir,dir]
-      #puts @cmd
       analyze_result
     end
     
@@ -26,13 +25,16 @@ class CommitInfoCmd < Cmd
   private
 
     def analize line
+      puts "------> #{line}"
       if @bug_fix == false && line.match(/(^|\s)(fix|issue|bug)/i)
         @bug_fix = true
       end
+      # @TODO can a C code line start with a '-' ? If it can, the following regex
+      # would not match some C code. From whar I know, C code can not start with a '-'
       if line.index("- ") == 0
-        @deletions << line + "\n"
+        @deletions << line
       end
-      @log << line + "\n"
+      @log << line
     end
     def default opts = {}
       opts[:sha] ||= "HEAD"

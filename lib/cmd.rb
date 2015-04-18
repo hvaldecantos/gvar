@@ -7,7 +7,7 @@ class Cmd
   private
     def analyze_result
       @cmd_runner.run(@cmd).each_line do |line|
-        analize(line.strip)
+        analize(line)
       end
     end
 end
