@@ -50,7 +50,8 @@ class GVarCLI
                           "\t--checkout <--sha=6419aee248d76> |\n" +
                           "\t--find-gv --dirs=\"['src','lib']\" <--sha=6419aee248d76> \n" +
                           "\t--store-commits --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
-                          "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 ]\n\n"
+                          "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
+                          "\t--commit-info --dirs=\"['src','lib']\" --sha=6419aee248d76 ]\n\n"
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
