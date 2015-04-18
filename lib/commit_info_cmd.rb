@@ -24,7 +24,7 @@ class CommitInfoCmd < Cmd
   private
 
     def analize line
-      if @bug_fix == false && line.match(/(^|\s)(fix|issue|bug)/i)
+      if @bug_fix == false && line.match(/(^|\s)(fix|issue|bug|bugfix)/i)
         @bug_fix = true
       end
       # @TODO can a C code line start with a '-' ? If it can, the following regex
