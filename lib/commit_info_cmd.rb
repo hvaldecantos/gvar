@@ -25,7 +25,6 @@ class CommitInfoCmd < Cmd
   private
 
     def analize line
-      puts "------> #{line}"
       if @bug_fix == false && line.match(/(^|\s)(fix|issue|bug)/i)
         @bug_fix = true
       end
