@@ -9,7 +9,8 @@ class ExtractMsgCmd < Cmd
   def run opts = {}
     default opts
 
-    @file = File.open(@cmd_runner.cwd + "/commit.msgs", "w")
+    filename = @cmd_runner.cwd + "/commit.msgs"
+    @file = File.open(filename, "w")
     @commits = 0
 
     dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
@@ -17,7 +18,7 @@ class ExtractMsgCmd < Cmd
     analyze_result
 
     @file.close unless @file == nil
-    "Word frequencies file saved."
+    "All commit messages file '#{filename}' saved."
   end
 
   private
