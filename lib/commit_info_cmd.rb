@@ -30,7 +30,7 @@ class CommitInfoCmd < Cmd
       # @TODO can a C code line start with a '-' ? If it can, the following regex
       # would not match some C code. From whar I know, C code can not start with a '-'
       if line.match(/^-(?!-)/)
-        @deletions << line.strip
+        @deletions << line.strip + " "
       end
     end
     def default opts = {}
