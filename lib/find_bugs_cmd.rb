@@ -2,7 +2,7 @@ require 'cmd'
 require 'mongo'
 
 class FindBugsCmd < Cmd
-  COMMAND = "git log --reverse --unified=0 %s -- %s/*.c %s/*.h"
+  COMMAND = "git log --reverse --unified=0 %s -- %s"
   def initialize cmd_runner
     super
     @bug_fix = false
@@ -20,10 +20,10 @@ class FindBugsCmd < Cmd
     Mongo::Logger.logger.level = Logger::INFO
     @mongo = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
-    opts[:dirs].each do |dir|
-      @cmd = COMMAND % [opts[:rev_range], dir, dir]
-      analyze_result
-    end
+    dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
+    @cmd = COMMAND % [opts[:rev_range], dirs]
+    analyze_result
+
     @bugs
   end
 

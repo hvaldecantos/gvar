@@ -2,7 +2,7 @@ require 'cmd'
 require 'checkout_cmd'
 
 class FindGVCmd < Cmd
-  COMMAND = "ctags -x --c-kinds=v --file-scope=no %s/*.c %s/*.h"
+  COMMAND = "ctags -x --c-kinds=v --file-scope=no %s"
   def initialize cmd_runner
     super
     @gvars = {}
@@ -15,10 +15,10 @@ class FindGVCmd < Cmd
     co = CheckoutCmd.new(@cmd_runner)
     co.run(opts)
 
-    opts[:dirs].each do |dir|
-      @cmd = COMMAND % [ dir, dir]
-      analyze_result
-    end
+    dirs = opts[:dirs].map{|d| ("%s/*.c %s/*.h" % [d, d]) + " "}.join.strip
+    @cmd = COMMAND % [dirs]
+    analyze_result
+
     @gvars
   end
 

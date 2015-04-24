@@ -1,7 +1,7 @@
 require 'cmd'
 
 class ExtractMsgCmd < Cmd
-  COMMAND = "git log %s -- '%s/*.c' '%s/*.h'"
+  COMMAND = "git log %s -- %s"
   def initialize cmd_runner
     super
   end
@@ -11,12 +11,10 @@ class ExtractMsgCmd < Cmd
 
     @file = File.open(@cmd_runner.cwd + "/commit.msgs", "w")
     @commits = 0
-    opts[:dirs].each do |dir|
-      @d = dir
-      @commits = 0
-      @cmd = COMMAND % [opts[:rev_range], dir, dir]
-      analyze_result
-    end
+
+    dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
+    @cmd = COMMAND % [opts[:rev_range], dirs]
+    analyze_result
 
     @file.close unless @file == nil
     "Word frequencies file saved."

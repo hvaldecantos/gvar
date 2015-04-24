@@ -1,7 +1,7 @@
 require 'cmd'
 
 class CommitInfoCmd < Cmd
-  COMMAND = "git log --reverse --unified=0 %s^..%s -- %s/*.c %s/*.h"
+  COMMAND = "git log --reverse --unified=0 %s^..%s -- %s"
   def initialize cmd_runner
     super
   end
@@ -10,11 +10,11 @@ class CommitInfoCmd < Cmd
     @bug_fix = false
     @deletions = ""
     default opts
-    opts[:dirs].each do |dir|
-      @cmd = COMMAND % [opts[:sha], opts[:sha], dir,dir]
-      analyze_result
-    end
-    
+
+    dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
+    @cmd = COMMAND % [opts[:sha], opts[:sha], dirs]
+    analyze_result
+
     {
       deletions:@deletions,
       bug_fix:@bug_fix
