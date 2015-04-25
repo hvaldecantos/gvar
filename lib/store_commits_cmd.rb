@@ -24,7 +24,11 @@ class StoreCommitsCmd < Cmd
     mongo = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
     shas = list_sha_cmd.run(opts)
-    
+    puts "Shas done"
+
+    count = shas.size
+    n = 1
+
     prior_globals = {}
     shas.each do |sha|
       checkout_cmd.run(:sha=>sha)
@@ -35,6 +39,8 @@ class StoreCommitsCmd < Cmd
       mongo[:commits].insert_one(commit)
       prior_globals = globals
       globals_info.process_commit(commit)
+      puts "Sha #{n}/#{count} done"
+      n += 1
     end
 
     # add globals info
