@@ -29,6 +29,8 @@ class StoreCommitsCmd < Cmd
     count = shas.size
     n = 1
 
+    mongo[:globals].insert_one({})
+
     prior_globals = {}
     shas.each do |sha|
       checkout_cmd.run(:sha=>sha)
@@ -39,13 +41,15 @@ class StoreCommitsCmd < Cmd
       mongo[:commits].insert_one(commit)
       prior_globals = globals
       globals_info.process_commit(commit)
-      puts "Sha #{n}/#{count} done"
+      if n%100==0
+        puts "Sha: #{sha} #{n}/#{count} done (#{Time.new})"
+        mongo[:globals].find().replace_one(globals_info.info)
+      end
       n += 1
     end
+    mongo[:globals].find().replace_one(globals_info.info)
 
     # add globals info
-    mongo[:globals].insert_many(globals_info.info.values)
-
     "Commits stored."
   end
 
