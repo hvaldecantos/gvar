@@ -38,7 +38,7 @@ class StoreCommitsCmd < Cmd
       commit = {}
       commit[:sha] = sha
       commit[:globals] = find_bugs(sha, globals, prior_globals, opts)
-      mongo[:commits].insert_one(commit)
+      # mongo[:commits].insert_one(commit)
       prior_globals = globals
       globals_info.process_commit(commit)
       if n%100==0
