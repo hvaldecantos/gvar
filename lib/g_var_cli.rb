@@ -9,6 +9,7 @@ require 'store_commits_cmd'
 require 'commit_info_cmd'
 require 'extract_msg_cmd'
 require 'word_freq_cmd'
+require 'count_all_bugs_cmd'
 
 require 'g_var/version'
 
@@ -44,6 +45,8 @@ class GVarCLI
       ExtractMsgCmd.new(cr)
     elsif gvar_opts.include? '--word-freqs'
       WordFreqCmd.new(cr)
+    elsif gvar_opts.include? '--count-all-bugs'
+      CountAllBugsCmd.new(cr)
     end
   end
 
@@ -59,7 +62,8 @@ class GVarCLI
                           "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
                           "\t--commit-info --dirs=\"['src','lib']\" --sha=6419aee248d76 \n" +
                           "\t--extract-msgs --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
-                          "\t--word-freqs --msgs-file=filename.msgs ]\n\n"
+                          "\t--word-freqs --msgs-file=filename.msgs \n" +
+                          "\t--count-all-bugs --dirs=\"['src','lib']\" --rev-range=tag1..tag2 ]\n\n"
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
@@ -80,6 +84,7 @@ class GVarCLI
       opts.on('--extract-msgs', 'Gets a file with all commit messages')  { gvar_opts << '--extract-msgs' }
       opts.on('--word-freqs', 'Gets a file with word frequencies from a commit.msgs file')  { gvar_opts << '--word-freqs' }
       opts.on('--msgs-file ', 'A commit.msgs file')  { |o| cmd_opts[:msgs_file] = o }
+      opts.on('--count-all-bugs ', 'Count all bugs')  { gvar_opts << '--count-all-bugs' }
     end.parse!(argv)
     if (gvar_opts & GVAR_OPTS).size > 1
       raise OptionParser::ParseError.new("#{gvar_opts.join(', ')} are mutually exclusive options")
