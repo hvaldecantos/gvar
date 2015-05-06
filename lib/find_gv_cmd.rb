@@ -26,7 +26,7 @@ class FindGVCmd < Cmd
     def analize line
       line_match = line.match(/^(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)$/)
       name, var, line_num, filename, line_code = line_match.captures unless line_match.nil?
-      @gvars.merge!({name => {line_num: line_num, filename: filename, line_code: line_code, bug: 0}})
+      @gvars.merge!({name => {line_num: line_num, filename: filename, line_code: line_code, removed: false, bug: 0}})
     end
 
     def default opts = {}

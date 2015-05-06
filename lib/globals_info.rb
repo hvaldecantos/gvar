@@ -15,7 +15,7 @@ class GlobalsInfo
 			end
 			if global_data[:bug] > 0
 				@info[global_name][:bug_count] += global_data[:bug]
-				@info[global_name][:bug_shas] << commit[:sha]
+				@info[global_name][:bug_shas] << {sha: commit[:sha], removed: global_data[:removed]}
 			end
 		end
 	end

@@ -24,7 +24,7 @@ class StoreCommitsCmd < Cmd
     mongo = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
     shas = list_sha_cmd.run(opts)
-    puts "Shas done"
+    puts "gvar started at (#{Time.new})"
 
     count = shas.size
     n = 1
@@ -49,8 +49,7 @@ class StoreCommitsCmd < Cmd
     end
     mongo[:globals].find().replace_one(globals_info.info)
 
-    # add globals info
-    "Commits stored."
+    "Commits stored: #{sha} #{n}/#{count} done (#{Time.new})"
   end
 
   private
@@ -62,8 +61,14 @@ class StoreCommitsCmd < Cmd
       if info[:bug_fix]
         prior_globals.each do |var_name, v|
           if info[:deletions].match /(^|\W)#{var_name}($|\W)/
-            globals[var_name][:bug] = 1
             puts "Bug found related to #{var_name} in #{sha}"
+            # A gv that is removed in a bugfix commit does not exist in the
+            # actual globals hash, so I add it.
+            if globals[var_name].nil?
+              globals.merge!({var_name => prior_globals[var_name]})
+              globals[var_name][:removed] = true
+            end
+            globals[var_name][:bug] = 1
           end
         end
       end
