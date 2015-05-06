@@ -25,6 +25,7 @@ class CommitInfoCmd < Cmd
       puts e.message  
       puts e.backtrace.inspect 
     end
+  end
 
   private
 
