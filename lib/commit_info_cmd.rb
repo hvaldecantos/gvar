@@ -13,13 +13,18 @@ class CommitInfoCmd < Cmd
 
     dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
     @cmd = COMMAND % [opts[:sha], opts[:sha], dirs]
-    analyze_result
 
-    {
-      deletions:@deletions,
-      bug_fix:@bug_fix
-    }
-  end
+    begin
+      analyze_result
+      {
+        deletions:@deletions,
+        bug_fix:@bug_fix
+      }
+    # See in git project: 0ca71b3737cbb26fbf037aa15b3f58735785e6e3
+    rescue => e
+      puts e.message  
+      puts e.backtrace.inspect 
+    end
 
   private
 
