@@ -1,7 +1,7 @@
 require 'cmd'
 
 class CommitInfoCmd < Cmd
-  COMMAND = "git log --reverse --unified=0 %s^..%s -- %s"
+  COMMAND = "git log --reverse --first-parent --unified=0 %s^..%s -- %s"
   def initialize cmd_runner
     super
   end
