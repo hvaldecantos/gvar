@@ -20,10 +20,14 @@ class CommitInfoCmd < Cmd
         deletions:@deletions,
         bug_fix:@bug_fix
       }
-    # See in git project: 0ca71b3737cbb26fbf037aa15b3f58735785e6e3
+    # See in git project: 0ca71b3737cbb26fbf037aa15b3f58735785e6e3 it has no parent sha^
     rescue => e
       puts e.message  
       puts e.backtrace.inspect 
+      {
+        deletions: "",
+        bug_fix: false
+      }
     end
   end
 
