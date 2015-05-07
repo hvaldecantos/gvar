@@ -27,12 +27,13 @@ class StoreCommitsCmd < Cmd
     puts "gvar started at (#{Time.new})"
 
     count = shas.size
-    n = 1
+    n = 0
 
     mongo[:globals].insert_one({})
 
     prior_globals = {}
     shas.each do |sha|
+      n += 1
       checkout_cmd.run(:sha=>sha)
       globals = find_gv_cmd.run(opts)
       commit = {}
@@ -45,11 +46,11 @@ class StoreCommitsCmd < Cmd
         puts "Sha: #{sha} #{n}/#{count} done (#{Time.new})"
         mongo[:globals].find().replace_one(globals_info.info)
       end
-      n += 1
+
     end
     mongo[:globals].find().replace_one(globals_info.info)
 
-    "Commits stored: #{sha} #{n}/#{count} done (#{Time.new})"
+    "Commits stored: #{n}/#{count} done (#{Time.new})"
   end
 
   private
