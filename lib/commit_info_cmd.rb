@@ -9,6 +9,7 @@ class CommitInfoCmd < Cmd
   def run opts = {}
     @bug_fix = false
     @deletions = ""
+    @log = ""
     default opts
 
     dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
@@ -18,7 +19,8 @@ class CommitInfoCmd < Cmd
       analyze_result
       {
         deletions:@deletions,
-        bug_fix:@bug_fix
+        bug_fix:@bug_fix,
+        log:@log
       }
     # See in git project: 0ca71b3737cbb26fbf037aa15b3f58735785e6e3 it has no parent sha^
     rescue => e
@@ -34,6 +36,7 @@ class CommitInfoCmd < Cmd
   private
 
     def analize line
+      @log << line
       if @bug_fix == false && line.match(/(^|\W)(fix|issue|bug|bugfix)/i)
         @bug_fix = true
       end
