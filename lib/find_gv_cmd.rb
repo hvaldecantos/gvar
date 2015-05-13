@@ -15,7 +15,7 @@ class FindGVCmd < Cmd
     co = CheckoutCmd.new(@cmd_runner)
     co.run(opts)
 
-    dirs = opts[:dirs].map{|d| ("%s/*.c %s/*.h" % [d, d]) + " "}.join.strip
+    dirs = opts[:dirs].map{|d| ("%s/*.c %s/**/*.c %s/*.h %s/**/*.h" % [d, d, d, d]) + " "}.join.strip
     @cmd = COMMAND % [dirs]
     analyze_result
 
