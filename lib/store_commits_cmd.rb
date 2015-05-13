@@ -31,6 +31,8 @@ class StoreCommitsCmd < Cmd
     n = 0
 
     mongo[:globals].insert_one({})
+    
+    bug_found = 0
 
     prior_globals = {}
     shas.each do |sha|
@@ -41,7 +43,7 @@ class StoreCommitsCmd < Cmd
       commit = {}
       commit[:sha] = sha
       commit[:log] = commit_info[:log]
-      commit[:globals] = find_bugs(sha, globals, prior_globals, commit_info)
+      commit[:globals] = find_bugs(sha, globals, prior_globals, commit_info, bug_found)
       # mongo[:commits].insert_one(commit)
       prior_globals = globals
       globals_info.process_commit(commit)
@@ -52,16 +54,17 @@ class StoreCommitsCmd < Cmd
 
     end
     mongo[:globals].find().replace_one(globals_info.info)
-
+    puts "Bugs found #{bug_found}"
     "Commits stored: #{n}/#{count} done (#{Time.new})"
   end
 
   private
-    def find_bugs sha, globals, prior_globals, info
+    def find_bugs sha, globals, prior_globals, info, bug_found
 
       if info[:bug_fix]
         prior_globals.each do |var_name, v|
           if info[:deletions].match /(^|\W)#{var_name}($|\W)/
+            bug_found += 1
             puts "Bug found related to #{var_name} in #{sha}"
             # A gv that is removed in a bugfix commit does not exist in the
             # actual globals hash, so I add it.
