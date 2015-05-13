@@ -60,11 +60,14 @@ class StoreCommitsCmd < Cmd
 
   private
     def find_bugs sha, globals, prior_globals, info
-
+      found = false
       if info[:bug_fix]
         prior_globals.each do |var_name, v|
           if info[:deletions].match /(^|\W)#{var_name}($|\W)/
-            @bug_found += 1
+            if found == false 
+              @bug_found += 1
+              found = true
+            end
             puts "Bug found (#{@bug_found}) related to #{var_name} in #{sha}"
             # A gv that is removed in a bugfix commit does not exist in the
             # actual globals hash, so I add it.
