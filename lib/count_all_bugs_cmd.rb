@@ -23,7 +23,7 @@ class CountAllBugsCmd < Cmd
         @bug_fix = false
       end
 
-      if @bug_fix == false && line.match(/(^|\s)(fix|issue|bug)/i)
+      if @bug_fix == false && line.match(/(^|\s)(fix|issue|bug|bugfix)/i)
         @bugs += 1
         @bug_fix = true
       end
