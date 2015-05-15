@@ -1,7 +1,7 @@
 require 'cmd'
 
 class CountAllBugsCmd < Cmd
-  COMMAND = "git log --reverse --unified=0 %s -- %s"
+  COMMAND = "git log --reverse %s -- %s"
   def initialize cmd_runner
     super
     @bug_fix = false
