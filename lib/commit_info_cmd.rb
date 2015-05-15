@@ -37,7 +37,7 @@ class CommitInfoCmd < Cmd
 
     def analize line
       @log << line
-      if @bug_fix == false && line.match(/(^|\W)(fix|issue|bug|bugfix)/i)
+      if @bug_fix == false && line.match(/(^|\W)(fix|issue|bug|bugfix)/i) && line.match(/^[^+-@]/) && !line.start_with?("diff --git")
         @bug_fix = true
       end
       # @TODO can a C code line start with a '-' ? If it can, the following regex
