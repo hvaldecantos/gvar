@@ -14,6 +14,12 @@ And then intall it:
 
     $ bundle install
 
-* Or install it from `gem` command:
+Or install it from `gem` command:
 
     $ gem install gvar
+
+## Dependencies
+
+* Git: http://www.git-scm.com/
+* Mongodb: https://www.mongodb.org/
+* Exuberant ctags: http://ctags.sourceforge.net/
