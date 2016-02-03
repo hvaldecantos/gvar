@@ -11,6 +11,7 @@ require 'extract_msg_cmd'
 require 'word_freq_cmd'
 require 'count_all_bugs_cmd'
 require 'project_inf_cmd'
+require 'extract_macro_tokens_cmd'
 
 require 'g_var/version'
 
@@ -44,6 +45,8 @@ class GVarCLI
       CommitInfoCmd.new(cr)
     elsif gvar_opts.include? '--extract-msgs'
       ExtractMsgCmd.new(cr)
+    elsif gvar_opts.include? '--extract-macro-tokens'
+      ExtractMacroTokensCmd.new(cr)
     elsif gvar_opts.include? '--word-freqs'
       WordFreqCmd.new(cr)
     elsif gvar_opts.include? '--count-all-bugs'
@@ -65,6 +68,7 @@ class GVarCLI
                           "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
                           "\t--commit-info --dirs=\"['src','lib']\" --sha=6419aee248d76 \n" +
                           "\t--extract-msgs --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
+                          "\t--extract-macro-tokens --dirs=\"['src','lib']\" \n" +
                           "\t--word-freqs --msgs-file=filename.msgs \n" +
                           "\t--count-all-bugs --dirs=\"['src','lib']\" --rev-range=tag1..tag2\n " +
                           "\t--project-inf --dirs=\"['src','lib']\" --rev-range=tag1..tag2 ]\n\n"
@@ -86,6 +90,7 @@ class GVarCLI
       opts.on('--find-bugs', 'Find bugs related to stored global variables')  { gvar_opts << '--find-bugs' }
       opts.on('--commit-info', 'Gets data from the sha log')  { gvar_opts << '--commit-info' }
       opts.on('--extract-msgs', 'Gets a file with all commit messages')  { gvar_opts << '--extract-msgs' }
+      opts.on('--extract-macro-tokens', 'Gets a file with all macro tokens')  { gvar_opts << '--extract-macro-tokens' }
       opts.on('--word-freqs', 'Gets a file with word frequencies from a commit.msgs file')  { gvar_opts << '--word-freqs' }
       opts.on('--msgs-file ', 'A commit.msgs file')  { |o| cmd_opts[:msgs_file] = o }
       opts.on('--count-all-bugs ', 'Count all bugs')  { gvar_opts << '--count-all-bugs' }
