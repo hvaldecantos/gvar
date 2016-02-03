@@ -2,7 +2,7 @@ require 'cmd'
 require 'checkout_cmd'
 
 class FindGVCmd < Cmd
-  COMMAND = "ctags -x --c-kinds=v --file-scope=no %s"
+  COMMAND = "ctags -x --c-kinds=v --file-scope=no --language-force=c %s"
   def initialize cmd_runner
     super
     @gvars = {}
