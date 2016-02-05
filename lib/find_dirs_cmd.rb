@@ -16,7 +16,7 @@ class FindDirsCmd < Cmd
 
   private
     def analize line
-      @dirs |= [(File.dirname(line) + "/*" + File.extname(line)).strip]
+      @dirs |= [(File.dirname(line) + "/*" + File.extname(line)).strip] unless (line =~ /test|example/i)
     end
 
     def default opts = {}
