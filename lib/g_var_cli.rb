@@ -64,7 +64,7 @@ class GVarCLI
     cmd_opts = {}
     OptionParser.new do |opts|
       opts.banner = "\ngvar [\t--find-src-dirs |\n" +
-                          "\t--find-dirs-to-analyze --dir=\"['.']\" \n" +
+                          "\t--find-dirs-to-analyze --dir=\"['src', 'lib']\" \n" +
                           "\t--list-shas <--rev-range=tag1..tag2> |\n"+
                           "\t--checkout <--sha=6419aee248d76> |\n" +
                           "\t--find-gv --dirs=\"['src','lib']\" <--sha=6419aee248d76> \n" +

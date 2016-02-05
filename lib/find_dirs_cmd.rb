@@ -9,7 +9,7 @@ class FindDirsCmd < Cmd
 
   def run opts = {}
     opts = default(opts)
-    @cmd = COMMAND % opts[:dirs]
+    @cmd = COMMAND % opts[:dirs].map{|d| ("%s" % [d]) + " "}.join.strip
     analyze_result
     @dirs.join(" ")
   end
