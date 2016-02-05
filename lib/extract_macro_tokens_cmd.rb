@@ -9,16 +9,13 @@ class ExtractMacroTokensCmd < Cmd
   def run opts = {}
     default opts
 
-    filename = @cmd_runner.cwd + "/macro.token_list"
-    @file = File.open(filename, "w")
-    @commits = 0
+    @tokens = []
 
-    dirs = opts[:dirs].map{|d| ("%s/*.c %s/**/*.c %s/*.h %s/**/*.h" % [d, d, d, d]) + " "}.join.strip
-    @cmd = COMMAND % [dirs]
+    dirs_to_analyze_string = FindDirsCmd.new(@cmd_runner).run(opts)
+    @cmd = COMMAND % [dirs_to_analyze_string]
     analyze_result
 
-    @file.close unless @file == nil
-    "All macro definition tokens saved in file '#{filename}'."
+    @tokens.join(",")
   end
 
   private
@@ -27,7 +24,7 @@ class ExtractMacroTokensCmd < Cmd
       matched = line.match(/^\s*\#\s*define\s*(\w*)/)
       if matched
         token = matched.captures
-        @file.write(token.first.strip + "+\n")
+        @tokens |= [token.first.strip + "+"]
       end
     end
 
