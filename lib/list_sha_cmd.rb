@@ -9,7 +9,7 @@ class ListShaCmd < Cmd
 
   def run opts = {}
     default opts
-    dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
+    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
     @cmd = COMMAND % [opts[:rev_range], dirs]
     analyze_result
     @shas

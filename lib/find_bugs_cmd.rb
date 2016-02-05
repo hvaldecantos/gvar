@@ -20,7 +20,7 @@ class FindBugsCmd < Cmd
     Mongo::Logger.logger.level = Logger::INFO
     @mongo = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
-    dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
+    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
     @cmd = COMMAND % [opts[:rev_range], dirs]
     analyze_result
 

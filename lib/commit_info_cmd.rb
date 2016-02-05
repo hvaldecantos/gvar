@@ -12,7 +12,7 @@ class CommitInfoCmd < Cmd
     @log = ""
     default opts
 
-    dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
+    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
     @cmd = COMMAND % [opts[:sha], opts[:sha], dirs]
 
     begin
