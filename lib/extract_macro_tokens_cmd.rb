@@ -24,7 +24,7 @@ class ExtractMacroTokensCmd < Cmd
       matched = line.match(/^\s*\#\s*define\s*(\w*)/)
       if matched
         token = matched.captures
-        @tokens |= [token.first.strip + "+"]
+        @tokens |= [token.first.strip]
       end
     end
 
