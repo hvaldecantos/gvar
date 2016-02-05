@@ -1,7 +1,7 @@
 require 'cmd'
 
 class FindCmd < Cmd
-  COMMAND = "find %s -name *.c -or -name *.h"
+  COMMAND = "find %s -type f -name '*.c' -or -name '*.h'"
   def initialize cmd_runner
     super
     @dirs = {}
