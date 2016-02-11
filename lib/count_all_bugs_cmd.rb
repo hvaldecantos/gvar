@@ -10,8 +10,7 @@ class CountAllBugsCmd < Cmd
 
   def run opts = {}
     default opts
-    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [opts[:rev_range], dirs]
+    @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
     analyze_result
     @bugs
   end
@@ -30,7 +29,7 @@ class CountAllBugsCmd < Cmd
     end
 
     def default opts = {}
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:filters] ||= "./*.c ./*.h"
       opts[:rev_range] ||= "HEAD"
       opts
     end

@@ -13,8 +13,7 @@ class ExtractMsgCmd < Cmd
     @file = File.open(filename, "w")
     @commits = 0
 
-    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [opts[:rev_range], dirs]
+    @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
     analyze_result
 
     @file.close unless @file == nil
@@ -35,8 +34,8 @@ class ExtractMsgCmd < Cmd
     end
 
     def default opts = {}
+      opts[:filters] ||= "./*.c ./*.h"
       opts[:rev_range] ||= "HEAD"
-      opts[:dirs] ||= [@cmd_runner.wd]
       opts
     end
 end

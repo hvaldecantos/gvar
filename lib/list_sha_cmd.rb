@@ -9,8 +9,7 @@ class ListShaCmd < Cmd
 
   def run opts = {}
     default opts
-    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [opts[:rev_range], dirs]
+    @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
     analyze_result
     @shas
   end
@@ -20,7 +19,7 @@ class ListShaCmd < Cmd
       @shas << line.strip
     end
     def default opts = {}
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:filters] ||= "./*.c ./*.h"
       opts[:rev_range] ||= "HEAD"
       opts
     end

@@ -1,6 +1,6 @@
 require 'cmd'
 
-class FindDirsCmd < Cmd
+class FindGitFiltersCmd < Cmd
   COMMAND = "find %s -type f -name '*.c' -or -name '*.h'"
   def initialize cmd_runner
     super
@@ -9,7 +9,7 @@ class FindDirsCmd < Cmd
 
   def run opts = {}
     opts = default(opts)
-    @cmd = COMMAND % opts[:dirs].map{|d| ("%s" % [d]) + " "}.join.strip
+    @cmd = COMMAND % opts[:dirs].strip
     analyze_result
     @dirs.join(" ")
   end
@@ -20,7 +20,7 @@ class FindDirsCmd < Cmd
     end
 
     def default opts = {}
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:dirs] ||= '.'
       opts
     end
 end

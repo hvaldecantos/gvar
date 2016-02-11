@@ -16,9 +16,7 @@ class FindGVCmd < Cmd
     co.run(opts)
 
     macro_tokens_string = ExtractMacroTokensCmd.new(@cmd_runner).run(opts)
-
-    dirs_to_analyze_string = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [macro_tokens_string, dirs_to_analyze_string]
+    @cmd = COMMAND % [macro_tokens_string, opts[:filters]]
 
     analyze_result
 
@@ -35,7 +33,8 @@ class FindGVCmd < Cmd
     end
 
     def default opts = {}
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:dirs] ||= '.'
+      opts[:filters] ||= FindGitFiltersCmd.new(@cmd_runner).run(opts)
       opts[:sha] ||= "HEAD"
       opts
     end

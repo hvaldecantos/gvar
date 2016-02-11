@@ -8,7 +8,8 @@ class FindCmd < Cmd
   end
 
   def run opts = {}
-    @cmd = COMMAND % @cmd_runner.wd
+    opts = default(opts)
+    @cmd = COMMAND % opts[:dirs].strip
     analyze_result
     @dirs
   end
@@ -16,5 +17,9 @@ class FindCmd < Cmd
   private
     def analize line
       @dirs[File.dirname(line)] = (@dirs[File.dirname(line)] || 0) + 1
+    end
+    def default opts = {}
+      opts[:dirs] ||= '.'
+      opts
     end
 end
