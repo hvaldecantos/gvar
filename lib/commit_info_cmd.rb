@@ -15,7 +15,7 @@ class CommitInfoCmd < Cmd
     @cmd = COMMAND % [opts[:sha], opts[:sha], opts[:filters]]
 
     begin
-      analyze_result
+      analyze_result opts[:logpath]
       {
         deletions:@deletions,
         bug_fix:@bug_fix,

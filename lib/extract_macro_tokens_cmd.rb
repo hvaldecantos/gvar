@@ -12,7 +12,7 @@ class ExtractMacroTokensCmd < Cmd
     @tokens = ["DUMMY_TOKEN"]
 
     @cmd = COMMAND % [opts[:filters]]
-    analyze_result
+    analyze_result opts[:logpath] unless opts[:filters].strip.empty?
 
     @tokens.join(",")
   end

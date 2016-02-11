@@ -38,7 +38,7 @@ class StoreCommitsCmd < Cmd
     shas.each do |sha|
       puts "--------> #{sha}"
       n += 1
-      checkout_cmd.run(:sha=>sha)
+      checkout_cmd.run(opts.merge({sha: sha}))
       # get git filter in the indicated directories
       opts[:filters] = FindGitFiltersCmd.new(@cmd_runner).run(opts)
       puts "--------> #{opts[:filters]}"

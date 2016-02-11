@@ -10,7 +10,7 @@ class FindCmd < Cmd
   def run opts = {}
     opts = default(opts)
     @cmd = COMMAND % opts[:dirs].strip
-    analyze_result
+    analyze_result opts[:logpath]
     @dirs
   end
 

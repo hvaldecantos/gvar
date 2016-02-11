@@ -11,7 +11,7 @@ class CountAllBugsCmd < Cmd
   def run opts = {}
     default opts
     @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
-    analyze_result
+    analyze_result opts[:logpath]
     @bugs
   end
 

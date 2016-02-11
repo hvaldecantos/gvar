@@ -9,7 +9,7 @@ class CheckoutCmd < Cmd
   def run opts = {}
     default opts
     @cmd = COMMAND % opts[:sha]
-    analyze_result
+    analyze_result opts[:logpath]
   end
 
   private

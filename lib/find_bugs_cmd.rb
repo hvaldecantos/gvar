@@ -21,7 +21,7 @@ class FindBugsCmd < Cmd
     @mongo = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
     @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
-    analyze_result
+    analyze_result opts[:logpath]
 
     @bugs
   end

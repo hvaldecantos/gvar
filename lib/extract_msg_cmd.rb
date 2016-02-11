@@ -14,7 +14,7 @@ class ExtractMsgCmd < Cmd
     @commits = 0
 
     @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
-    analyze_result
+    analyze_result opts[:logpath]
 
     @file.close unless @file == nil
     "All commit messages file '#{filename}' saved."

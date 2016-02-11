@@ -13,9 +13,9 @@ class ProjectInfCmd < Cmd
   def run opts = {}
     default opts
     @cmd = COMMAND_FIRST % [opts[:rev_range], opts[:filters]]
-    analyze_result
+    analyze_result opts[:logpath]
     @cmd = COMMAND_LAST % [opts[:rev_range], opts[:filters]]
-    analyze_result
+    analyze_result opts[:logpath]
     
     (@dates[1]-@dates[0]).to_i
   end

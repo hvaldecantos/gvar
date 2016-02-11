@@ -11,7 +11,7 @@ class WordFreqCmd < Cmd
     filename = @cmd_runner.cwd + "/word.frqs"
     @file = File.open(filename, "w")
     @cmd = COMMAND % opts[:msgs_file]
-    analyze_result
+    analyze_result opts[:logpath]
 
     @file.close unless @file == nil
     "Word frequencies file '#{filename}' saved."

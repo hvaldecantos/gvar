@@ -63,19 +63,19 @@ class GVarCLI
     gvar_opts = []
     cmd_opts = {}
     OptionParser.new do |opts|
-      opts.banner = "\ngvar [\t--find-src-dirs <--directories=\"dir1 dir2\">\n" +
-                          "\t--find-git-filters <--directories=\"dir1 dir2\"> \n" +
-                          "\t--list-shas <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2>\n" +
-                          "\t--checkout <--sha=HEAD>\n" +
-                          "\t--find-gv <--directories=\"src lib\"> <--filters=\"*.c *.h\"> <--sha=HEAD> \n" +
-                          "\t--store-commits --db=dbname <--directories=\"dir1 dir2\"> <--rev-range=tag1..tag2>  \n" +
-                          "\t--find-bugs --db=dbname <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> \n" +
-                          "\t--commit-info <--filters=\"*.c *.h\"> <--sha=HEAD> \n" +
-                          "\t--extract-msgs <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> \n" +
-                          "\t--extract-macro-tokens <--filters=\"*.c *.h\"> \n" +
-                          "\t--word-freqs --msgs-file=filename.msgs \n" +
-                          "\t--count-all-bugs <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2>\n " +
-                          "\t--project-inf <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> ]\n\n"
+      opts.banner = "\ngvar [\t--find-src-dirs <--directories=\"dir1 dir2\"> <--logpath path=path>\n" +
+                          "\t--find-git-filters <--directories=\"dir1 dir2\"> <--logpath path=path>\n" +
+                          "\t--list-shas <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--checkout <--sha=HEAD> <--logpath path=path>\n" +
+                          "\t--find-gv <--directories=\"src lib\"> <--filters=\"*.c *.h\"> <--sha=HEAD> <--logpath path=path>\n" +
+                          "\t--store-commits --db=dbname <--directories=\"dir1 dir2\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--find-bugs --db=dbname <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--commit-info <--filters=\"*.c *.h\"> <--sha=HEAD> <--logpath path=path>\n" +
+                          "\t--extract-msgs <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--extract-macro-tokens <--filters=\"*.c *.h\"> <--logpath path=path>\n" +
+                          "\t--word-freqs --msgs-file=filename.msgs <--logpath path=path>\n" +
+                          "\t--count-all-bugs <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n " +
+                          "\t--project-inf <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>]\n\n"
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
@@ -90,6 +90,7 @@ class GVarCLI
       opts.on('--find-gv', 'Find global vars')  { gvar_opts << '--find-gv' }
       opts.on('--dirs array_dirnames', 'array directory to analyse and find gvs') { |o| cmd_opts[:dirs] = eval(o) }
       opts.on('--directories dir_list', 'specify a list of one or more directory') { |o| cmd_opts[:dirs] = o }
+      opts.on('--logpath path', 'specify a path for the log file') { |o| cmd_opts[:logpath] = o }
       opts.on('--filters filter_list', 'specify a list of one or more git filter') { |o| cmd_opts[:filters] = o }
       opts.separator("")
       opts.on('--store-commits', 'Store commits to DB')  { gvar_opts << '--store-commits' }
