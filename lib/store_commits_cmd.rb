@@ -36,8 +36,12 @@ class StoreCommitsCmd < Cmd
 
     prior_globals = {}
     shas.each do |sha|
+      puts "--------> #{sha}"
       n += 1
-      checkout_cmd.run(:sha=>sha)
+      checkout_cmd.run(opts.merge({sha: sha}))
+      # get git filter in the indicated directories
+      opts[:filters] = FindGitFiltersCmd.new(@cmd_runner).run(opts)
+      puts "--------> #{opts[:filters]}"
       globals = find_gv_cmd.run(opts)
       commit_info = commit_info_cmd.run(opts.merge({sha: sha}))
       commit = {}
@@ -88,6 +92,8 @@ class StoreCommitsCmd < Cmd
 
     def default opts = {}
       opts[:db] ||= File.basename(@cmd_runner.wd)
+      opts[:dirs] ||= '.'
+      opts[:filters] ||= FindGitFiltersCmd.new(@cmd_runner).run(opts)
       opts[:rev_range] ||= "HEAD^^^..HEAD"
       opts
     end

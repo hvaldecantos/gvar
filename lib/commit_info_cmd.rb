@@ -12,11 +12,10 @@ class CommitInfoCmd < Cmd
     @log = ""
     default opts
 
-    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [opts[:sha], opts[:sha], dirs]
+    @cmd = COMMAND % [opts[:sha], opts[:sha], opts[:filters]]
 
     begin
-      analyze_result
+      analyze_result opts[:logpath]
       {
         deletions:@deletions,
         bug_fix:@bug_fix,
@@ -48,7 +47,7 @@ class CommitInfoCmd < Cmd
     end
     def default opts = {}
       opts[:sha] ||= "HEAD"
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:filters] ||= "./*.c ./*.h"
       opts
     end
 end

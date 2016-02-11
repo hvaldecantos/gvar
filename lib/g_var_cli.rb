@@ -1,7 +1,7 @@
 require 'optparse'
 require 'cmd_runner'
 require 'find_cmd'
-require 'find_dirs_cmd'
+require 'find_git_filters_cmd'
 require 'list_sha_cmd'
 require 'checkout_cmd'
 require 'find_gv_cmd'
@@ -32,8 +32,8 @@ class GVarCLI
     cr = CmdRunner.new Dir.getwd
     if gvar_opts.include? FIND_SRC_DIRS
       FindCmd.new(cr)
-    elsif gvar_opts.include? '--find-dirs-to-analyze'
-      FindDirsCmd.new(cr)
+    elsif gvar_opts.include? '--find-git-filters'
+      FindGitFiltersCmd.new(cr)
     elsif gvar_opts.include? LIST_SHAS
       ListShaCmd.new(cr)
     elsif gvar_opts.include? '--checkout'
@@ -63,23 +63,23 @@ class GVarCLI
     gvar_opts = []
     cmd_opts = {}
     OptionParser.new do |opts|
-      opts.banner = "\ngvar [\t--find-src-dirs |\n" +
-                          "\t--find-dirs-to-analyze --dir=\"['src', 'lib']\" \n" +
-                          "\t--list-shas <--rev-range=tag1..tag2> |\n"+
-                          "\t--checkout <--sha=6419aee248d76> |\n" +
-                          "\t--find-gv --dirs=\"['src','lib']\" <--sha=6419aee248d76> \n" +
-                          "\t--store-commits --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
-                          "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
-                          "\t--commit-info --dirs=\"['src','lib']\" --sha=6419aee248d76 \n" +
-                          "\t--extract-msgs --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
-                          "\t--extract-macro-tokens --dirs=\"['src','lib']\" \n" +
-                          "\t--word-freqs --msgs-file=filename.msgs \n" +
-                          "\t--count-all-bugs --dirs=\"['src','lib']\" --rev-range=tag1..tag2\n " +
-                          "\t--project-inf --dirs=\"['src','lib']\" --rev-range=tag1..tag2 ]\n\n"
+      opts.banner = "\ngvar [\t--find-src-dirs <--directories=\"dir1 dir2\"> <--logpath path=path>\n" +
+                          "\t--find-git-filters <--directories=\"dir1 dir2\"> <--logpath path=path>\n" +
+                          "\t--list-shas <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--checkout <--sha=HEAD> <--logpath path=path>\n" +
+                          "\t--find-gv <--directories=\"src lib\"> <--filters=\"*.c *.h\"> <--sha=HEAD> <--logpath path=path>\n" +
+                          "\t--store-commits --db=dbname <--directories=\"dir1 dir2\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--find-bugs --db=dbname <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--commit-info <--filters=\"*.c *.h\"> <--sha=HEAD> <--logpath path=path>\n" +
+                          "\t--extract-msgs <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n" +
+                          "\t--extract-macro-tokens <--filters=\"*.c *.h\"> <--logpath path=path>\n" +
+                          "\t--word-freqs --msgs-file=filename.msgs <--logpath path=path>\n" +
+                          "\t--count-all-bugs <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>\n " +
+                          "\t--project-inf <--filters=\"*.c *.h\"> <--rev-range=tag1..tag2> <--logpath path=path>]\n\n"
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
-      opts.on('--find-dirs-to-analyze', 'Return a space separeted string with directories containing *.c or *.h files.'){ gvar_opts << '--find-dirs-to-analyze' }
+      opts.on('--find-git-filters', 'Return a space separeted string with directories containing *.c or *.h files.'){ gvar_opts << '--find-git-filters' }
       opts.separator("")
       opts.on('--checkout', 'Checkout')  { gvar_opts << '--checkout' }
       opts.on('--sha shaID', 'shar id of the revision')  { |o| cmd_opts[:sha] = o }
@@ -89,6 +89,9 @@ class GVarCLI
       opts.separator("")
       opts.on('--find-gv', 'Find global vars')  { gvar_opts << '--find-gv' }
       opts.on('--dirs array_dirnames', 'array directory to analyse and find gvs') { |o| cmd_opts[:dirs] = eval(o) }
+      opts.on('--directories dir_list', 'specify a list of one or more directory') { |o| cmd_opts[:dirs] = o }
+      opts.on('--logpath path', 'specify a path for the log file') { |o| cmd_opts[:logpath] = o }
+      opts.on('--filters filter_list', 'specify a list of one or more git filter') { |o| cmd_opts[:filters] = o }
       opts.separator("")
       opts.on('--store-commits', 'Store commits to DB')  { gvar_opts << '--store-commits' }
       opts.on('--db ', 'Database to store commits')  { |o| cmd_opts[:db] = o }
@@ -98,7 +101,7 @@ class GVarCLI
       opts.on('--extract-macro-tokens', 'Gets a file with all macro tokens')  { gvar_opts << '--extract-macro-tokens' }
       opts.on('--word-freqs', 'Gets a file with word frequencies from a commit.msgs file')  { gvar_opts << '--word-freqs' }
       opts.on('--msgs-file ', 'A commit.msgs file')  { |o| cmd_opts[:msgs_file] = o }
-      opts.on('--count-all-bugs ', 'Count all bugs')  { gvar_opts << '--count-all-bugs' }
+      opts.on('--count-all-bugs', 'Count all bugs')  { gvar_opts << '--count-all-bugs' }
       opts.on('--project-inf', 'Get project info (days)')  { gvar_opts << '--project-inf' }
     end.parse!(argv)
     if (gvar_opts & GVAR_OPTS).size > 1

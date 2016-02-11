@@ -9,11 +9,10 @@ class ExtractMacroTokensCmd < Cmd
   def run opts = {}
     default opts
 
-    @tokens = []
+    @tokens = ["DUMMY_TOKEN"]
 
-    dirs_to_analyze_string = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [dirs_to_analyze_string]
-    analyze_result
+    @cmd = COMMAND % [opts[:filters]]
+    analyze_result opts[:logpath] unless opts[:filters].strip.empty?
 
     @tokens.join(",")
   end
@@ -29,7 +28,7 @@ class ExtractMacroTokensCmd < Cmd
     end
 
     def default opts = {}
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:filters] ||= "./*.c ./*.h"
       opts
     end
 end

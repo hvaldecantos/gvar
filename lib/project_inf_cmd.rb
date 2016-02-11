@@ -12,11 +12,10 @@ class ProjectInfCmd < Cmd
 
   def run opts = {}
     default opts
-    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND_FIRST % [opts[:rev_range], dirs]
-    analyze_result
-    @cmd = COMMAND_LAST % [opts[:rev_range], dirs]
-    analyze_result
+    @cmd = COMMAND_FIRST % [opts[:rev_range], opts[:filters]]
+    analyze_result opts[:logpath]
+    @cmd = COMMAND_LAST % [opts[:rev_range], opts[:filters]]
+    analyze_result opts[:logpath]
     
     (@dates[1]-@dates[0]).to_i
   end
@@ -27,7 +26,7 @@ class ProjectInfCmd < Cmd
     end
 
     def default opts = {}
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:filters] ||= "./*.c ./*.h"
       opts[:rev_range] ||= "HEAD"
       opts
     end

@@ -13,9 +13,8 @@ class ExtractMsgCmd < Cmd
     @file = File.open(filename, "w")
     @commits = 0
 
-    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [opts[:rev_range], dirs]
-    analyze_result
+    @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
+    analyze_result opts[:logpath]
 
     @file.close unless @file == nil
     "All commit messages file '#{filename}' saved."
@@ -35,8 +34,8 @@ class ExtractMsgCmd < Cmd
     end
 
     def default opts = {}
+      opts[:filters] ||= "./*.c ./*.h"
       opts[:rev_range] ||= "HEAD"
-      opts[:dirs] ||= [@cmd_runner.wd]
       opts
     end
 end

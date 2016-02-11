@@ -20,9 +20,8 @@ class FindBugsCmd < Cmd
     Mongo::Logger.logger.level = Logger::INFO
     @mongo = Mongo::Client.new([ '127.0.0.1:27017' ], :database => opts[:db])
 
-    dirs = FindDirsCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [opts[:rev_range], dirs]
-    analyze_result
+    @cmd = COMMAND % [opts[:rev_range], opts[:filters]]
+    analyze_result opts[:logpath]
 
     @bugs
   end
@@ -88,7 +87,7 @@ class FindBugsCmd < Cmd
     end
 
     def default opts = {}
-      opts[:dirs] ||= [@cmd_runner.wd]
+      opts[:filters] ||= "./*.c ./*.h"
       opts[:rev_range] ||= "HEAD"
       opts
     end
