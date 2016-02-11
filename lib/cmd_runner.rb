@@ -12,9 +12,11 @@ class CmdRunner
     Dir.chdir @wd
     begin
       Open3.popen3(cmd) do |i, o, e, t|
+        o.set_encoding 'ISO-8859-1'
+        result = o.read
         error = e.read
         raise StandardError, error unless (t.value.success? or error.empty?)
-        result = o.read
+        result
       end
     rescue Errno::ENOENT
       raise StandardError, "No command '#{cmd}' found\n"

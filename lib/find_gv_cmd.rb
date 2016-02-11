@@ -10,6 +10,7 @@ class FindGVCmd < Cmd
 
   def run opts = {}
     opts = default(opts)
+    @gvars = []
 
     co = CheckoutCmd.new(@cmd_runner)
     co.run(opts)
@@ -24,8 +25,8 @@ class FindGVCmd < Cmd
   private
     def analize line
       line_match = line.match(/^(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)$/)
-      name, var, line_num, line_code = line_match.captures unless line_match.nil?
-      h = {name: name, line_num: line_num, line_code: line_code, bug: 0}
+      name, var, line_num, filename, line_code = line_match.captures unless line_match.nil?
+      h = {name: name, line_num: line_num, filename: filename, line_code: line_code, bug: 0}
       @gvars << h
     end
 
