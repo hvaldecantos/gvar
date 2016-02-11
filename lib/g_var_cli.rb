@@ -1,6 +1,7 @@
 require 'optparse'
 require 'cmd_runner'
 require 'find_cmd'
+require 'find_dirs_cmd'
 require 'list_sha_cmd'
 require 'checkout_cmd'
 require 'find_gv_cmd'
@@ -31,6 +32,8 @@ class GVarCLI
     cr = CmdRunner.new Dir.getwd
     if gvar_opts.include? FIND_SRC_DIRS
       FindCmd.new(cr)
+    elsif gvar_opts.include? '--find-dirs-to-analyze'
+      FindDirsCmd.new(cr)
     elsif gvar_opts.include? LIST_SHAS
       ListShaCmd.new(cr)
     elsif gvar_opts.include? '--checkout'
@@ -61,6 +64,7 @@ class GVarCLI
     cmd_opts = {}
     OptionParser.new do |opts|
       opts.banner = "\ngvar [\t--find-src-dirs |\n" +
+                          "\t--find-dirs-to-analyze --dir=\"['src', 'lib']\" \n" +
                           "\t--list-shas <--rev-range=tag1..tag2> |\n"+
                           "\t--checkout <--sha=6419aee248d76> |\n" +
                           "\t--find-gv --dirs=\"['src','lib']\" <--sha=6419aee248d76> \n" +
@@ -75,6 +79,7 @@ class GVarCLI
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
+      opts.on('--find-dirs-to-analyze', 'Return a space separeted string with directories containing *.c or *.h files.'){ gvar_opts << '--find-dirs-to-analyze' }
       opts.separator("")
       opts.on('--checkout', 'Checkout')  { gvar_opts << '--checkout' }
       opts.on('--sha shaID', 'shar id of the revision')  { |o| cmd_opts[:sha] = o }

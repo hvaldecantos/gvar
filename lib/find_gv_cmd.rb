@@ -2,7 +2,7 @@ require 'cmd'
 require 'checkout_cmd'
 
 class FindGVCmd < Cmd
-  COMMAND = "ctags -x --c-kinds=v --file-scope=no --language-force=c %s"
+  COMMAND = "ctags -x --c-kinds=v --file-scope=no --language-force=c -I %s %s"
   def initialize cmd_runner
     super
     @gvars = {}
@@ -15,8 +15,11 @@ class FindGVCmd < Cmd
     co = CheckoutCmd.new(@cmd_runner)
     co.run(opts)
 
-    dirs = opts[:dirs].map{|d| ("%s/*.c %s/**/*.c %s/*.h %s/**/*.h" % [d, d, d, d]) + " "}.join.strip
-    @cmd = COMMAND % [dirs]
+    macro_tokens_string = ExtractMacroTokensCmd.new(@cmd_runner).run(opts)
+
+    dirs_to_analyze_string = FindDirsCmd.new(@cmd_runner).run(opts)
+    @cmd = COMMAND % [macro_tokens_string, dirs_to_analyze_string]
+
     analyze_result
 
     @gvars
