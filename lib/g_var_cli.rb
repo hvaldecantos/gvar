@@ -6,6 +6,8 @@ require 'checkout_cmd'
 require 'find_gv_cmd'
 require 'find_bugs_cmd'
 require 'store_commits_cmd'
+require 'commit_info_cmd'
+require 'extract_msg_cmd'
 
 require 'g_var/version'
 
@@ -35,6 +37,10 @@ class GVarCLI
       StoreCommitsCmd.new(cr)
     elsif gvar_opts.include? '--find-bugs'
       FindBugsCmd.new(cr)
+    elsif gvar_opts.include? '--commit-info'
+      CommitInfoCmd.new(cr)
+    elsif gvar_opts.include? '--extract-msgs'
+      ExtractMsgCmd.new(cr)
     end
   end
 
@@ -47,7 +53,9 @@ class GVarCLI
                           "\t--checkout <--sha=6419aee248d76> |\n" +
                           "\t--find-gv --dirs=\"['src','lib']\" <--sha=6419aee248d76> \n" +
                           "\t--store-commits --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
-                          "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 ]\n\n"
+                          "\t--find-bugs --db=dbname --dirs=\"['src','lib']\" --rev-range=tag1..tag2 \n" +
+                          "\t--commit-info --dirs=\"['src','lib']\" --sha=6419aee248d76 \n" +
+                          "\t--extract-msgs --dirs=\"['src','lib']\" --rev-range=tag1..tag2 ]\n\n"
       opts.separator "Command line that returns global variables related reports."
       opts.version = GVar::VERSION
       opts.on('--find-src-dirs', 'Return a hash with directories containing *.c or *.h files and the number of files.'){ gvar_opts << '--find-src-dirs' }
@@ -64,6 +72,8 @@ class GVarCLI
       opts.on('--store-commits', 'Store commits to DB')  { gvar_opts << '--store-commits' }
       opts.on('--db ', 'Database to store commits')  { |o| cmd_opts[:db] = o }
       opts.on('--find-bugs', 'Find bugs related to stored global variables')  { gvar_opts << '--find-bugs' }
+      opts.on('--commit-info', 'Gets data from the sha log')  { gvar_opts << '--commit-info' }
+      opts.on('--extract-msgs', 'Gets a file with all commit messages')  { gvar_opts << '--extract-msgs' }
     end.parse!(argv)
     if (gvar_opts & GVAR_OPTS).size > 1
       raise OptionParser::ParseError.new("#{gvar_opts.join(', ')} are mutually exclusive options")

@@ -16,7 +16,7 @@ class ListShaCmd < Cmd
 
   private
     def analize line
-      @shas << line
+      @shas << line.strip
     end
     def default opts = {}
       opts[:rev_range] ||= "HEAD"

@@ -5,12 +5,12 @@ class FindGVCmd < Cmd
   COMMAND = "ctags -x --c-kinds=v --file-scope=no %s/*.c %s/*.h"
   def initialize cmd_runner
     super
-    @gvars = []
+    @gvars = {}
   end
 
   def run opts = {}
     opts = default(opts)
-    @gvars = []
+    @gvars = {}
 
     co = CheckoutCmd.new(@cmd_runner)
     co.run(opts)
@@ -26,8 +26,7 @@ class FindGVCmd < Cmd
     def analize line
       line_match = line.match(/^(.+?)\s+(.+?)\s+(.+?)\s+(.+?)\s+(.+?)$/)
       name, var, line_num, filename, line_code = line_match.captures unless line_match.nil?
-      h = {name: name, line_num: line_num, filename: filename, line_code: line_code, bug: 0}
-      @gvars << h
+      @gvars.merge!({name => {line_num: line_num, filename: filename, line_code: line_code, bug: 0}})
     end
 
     def default opts = {}
