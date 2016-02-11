@@ -1,7 +1,7 @@
 require 'cmd'
 
 class CommitInfoCmd < Cmd
-  COMMAND = "git log --reverse --unified=0 %s^..%s -- %s/*.c %s/*.h"
+  COMMAND = "git log --reverse --first-parent --unified=0 %s^..%s -- %s"
   def initialize cmd_runner
     super
   end
@@ -9,22 +9,35 @@ class CommitInfoCmd < Cmd
   def run opts = {}
     @bug_fix = false
     @deletions = ""
+    @log = ""
     default opts
-    opts[:dirs].each do |dir|
-      @cmd = COMMAND % [opts[:sha], opts[:sha], dir,dir]
+
+    dirs = opts[:dirs].map{|d| ("'%s/*.c' '%s/*.h'" % [d, d]) + " "}.join.strip
+    @cmd = COMMAND % [opts[:sha], opts[:sha], dirs]
+
+    begin
       analyze_result
+      {
+        deletions:@deletions,
+        bug_fix:@bug_fix,
+        log:@log
+      }
+    # See in git project: 0ca71b3737cbb26fbf037aa15b3f58735785e6e3 it has no parent sha^
+    rescue => e
+      puts e.message  
+      puts e.backtrace.inspect 
+      {
+        deletions: "",
+        bug_fix: false
+      }
     end
-    
-    {
-      deletions:@deletions,
-      bug_fix:@bug_fix
-    }
   end
 
   private
 
     def analize line
-      if @bug_fix == false && line.match(/(^|\W)(fix|issue|bug|bugfix)/i)
+      @log << line
+      if @bug_fix == false && line.match(/(^|\W)(fix|issue|bug|bugfix)/i) && line.match(/^[^+-@]/) && !line.start_with?("diff --git")
         @bug_fix = true
       end
       # @TODO can a C code line start with a '-' ? If it can, the following regex
