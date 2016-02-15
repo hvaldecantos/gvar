@@ -14,10 +14,12 @@ class FindGVCmd < Cmd
 
     CheckoutCmd.new(@cmd_runner).run(opts) unless opts[:sha] = "HEAD"
 
-    macro_tokens_string = ExtractMacroTokensCmd.new(@cmd_runner).run(opts)
-    @cmd = COMMAND % [macro_tokens_string, opts[:filters]]
+    if !opts[:filters].empty?
+      macro_tokens_string = ExtractMacroTokensCmd.new(@cmd_runner).run(opts)
+      @cmd = COMMAND % [macro_tokens_string, opts[:filters]]
 
-    analyze_result opts[:logpath]
+      analyze_result opts[:logpath]
+    end
 
     @gvars
   end
