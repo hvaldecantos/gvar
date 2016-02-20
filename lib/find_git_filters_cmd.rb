@@ -20,7 +20,7 @@ class FindGitFiltersCmd < Cmd
 
   private
     def analize line
-      @filters |= [(File.dirname(line) + "/*" + File.extname(line)).strip] unless (line =~ /test|example/i)
+      @filters |= [(File.dirname(line) + "/*" + File.extname(line)).strip] unless (line =~ /test|example|sample|demo/i)
     end
 
     def default opts = {}
