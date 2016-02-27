@@ -22,8 +22,8 @@ class ExtractMacroTokensCmd < Cmd
     def analize line
       matched = line.match(/^\s*\#\s*define\s*(\w*)/)
       if matched
-        token = matched.captures
-        @tokens |= [token.first.strip]
+        token = matched.captures.first.strip
+        @tokens |= [token] # unless token.start_with?("GTK_") or token.start_with?("GDK_")
       end
     end
 
