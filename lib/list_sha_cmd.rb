@@ -1,7 +1,7 @@
 require 'cmd'
 
 class ListShaCmd < Cmd
-  COMMAND = "git rev-list --no-merges %s -- %s"
+  COMMAND = "git rev-list --no-merges --reverse %s -- %s"
   def initialize cmd_runner
     super
     @shas = []
